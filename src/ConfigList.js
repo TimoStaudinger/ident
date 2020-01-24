@@ -32,10 +32,8 @@ const useStyles = makeStyles(theme => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2)
   },
-  form: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1)
-    }
+  configInput: {
+    width: 400
   }
 }))
 
@@ -48,21 +46,30 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
     exit: theme.transitions.duration.leavingScreen
   }
 
-  const [showSettingsDialog, setShowSettingsDialog] = useState(false)
+  const [showAddConfigDialog, setShowAddConfigDialog] = useState(false)
   const [newConfigURL, setNewConfigURL] = useState('')
 
   const handleRemoveConfig = url => {
     removeConfig(url)
   }
   const handleAddConfig = () => {
+    setNewConfigURL('')
+    setShowAddConfigDialog(false)
     addConfig(newConfigURL)
-    setShowSettingsDialog(false)
   }
+  const handleCancelAddConfig = () => {
+    setNewConfigURL('')
+    setShowAddConfigDialog(false)
+  }
+
+  const filteredConfigs = filter
+    ? configs.filter(config => config.name.toLowerCase().includes(filter))
+    : configs
 
   return (
     <div className={classes.root}>
       <List>
-        {configs.map(config => (
+        {filteredConfigs.map(config => (
           <ListItem>
             <ListItemIcon>
               <DescriptionIcon />
@@ -78,8 +85,8 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
       </List>
 
       <Dialog
-        open={showSettingsDialog}
-        onClose={() => setShowSettingsDialog(false)}
+        open={showAddConfigDialog}
+        onClose={handleCancelAddConfig}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
@@ -89,14 +96,14 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
           <form className={classes.form} noValidate autoComplete="off">
             <TextField
               label="Configuration File URL"
-              fullWidth
+              className={classes.configInput}
               value={newConfigURL}
               onChange={e => setNewConfigURL(e.target.value)}
             />
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowSettingsDialog(false)}>Cancel</Button>
+          <Button onClick={handleCancelAddConfig}>Cancel</Button>
           <Button onClick={handleAddConfig} color="primary">
             Add
           </Button>
@@ -114,7 +121,7 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
         <Fab
           color="secondary"
           className={classes.addButton}
-          onClick={() => setShowSettingsDialog(true)}
+          onClick={() => setShowAddConfigDialog(true)}
         >
           <AddIcon className={classes.extendedIcon} />
         </Fab>

@@ -1,7 +1,13 @@
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import {List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core'
+import PersonIcon from '@material-ui/icons/Person'
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar
+} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,10 +21,8 @@ const useStyles = makeStyles(theme => ({
 const UserList = ({filter, currentUser, users, selectCurrentUser}) => {
   const classes = useStyles()
 
-  const normalizedFilter =
-    filter && filter.trim().length ? filter.trim().toLowerCase() : null
-  const filteredUsers = normalizedFilter
-    ? users.filter(user => user.name.toLowerCase().includes(normalizedFilter))
+  const filteredUsers = filter
+    ? users.filter(user => user.name.toLowerCase().includes(filter))
     : users
 
   return (
@@ -30,9 +34,11 @@ const UserList = ({filter, currentUser, users, selectCurrentUser}) => {
             selected={currentUser && currentUser.name === user.name}
             onClick={() => selectCurrentUser(user)}
           >
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
+            <ListItemAvatar>
+              <Avatar>
+                <PersonIcon />
+              </Avatar>
+            </ListItemAvatar>
             <ListItemText
               primary={user.name}
               secondary={

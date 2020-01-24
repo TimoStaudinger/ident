@@ -6,11 +6,14 @@ import {
   InputBase,
   fade,
   makeStyles,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+
+import Logo from './users.svg'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -59,6 +62,10 @@ const useStyles = makeStyles(theme => ({
         width: 200
       }
     }
+  },
+  logo: {
+    height: '2rem',
+    marginRight: '1rem'
   }
 }))
 
@@ -74,19 +81,28 @@ const Header = ({
   return (
     <AppBar position="static" className={classes.header}>
       <Toolbar>
+        <img src={Logo} alt="Ident" className={classes.logo} />
+
         <Typography className={classes.title} variant="h6" noWrap>
           Ident
         </Typography>
 
         {currentUser && (
-          <IconButton onClick={() => selectCurrentUser(null)} color="inherit">
-            <ExitToAppIcon />
-          </IconButton>
+          <Tooltip title="Log out" aria-label="log out">
+            <IconButton onClick={() => selectCurrentUser(null)} color="inherit">
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>
         )}
 
-        <IconButton onClick={refreshConfigs} color="inherit">
-          <RefreshIcon />
-        </IconButton>
+        <Tooltip
+          title="Refresh all configurations"
+          aria-label="refresh all configurations"
+        >
+          <IconButton onClick={refreshConfigs} color="inherit">
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
 
         <div className={classes.search}>
           <div className={classes.searchIcon}>
@@ -94,7 +110,7 @@ const Header = ({
           </div>
           <InputBase
             autoFocus
-            placeholder="Search…"
+            placeholder="Filter…"
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput

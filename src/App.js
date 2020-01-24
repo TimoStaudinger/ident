@@ -46,8 +46,15 @@ const App = () => {
   const classes = useStyles()
 
   const [filter, setFilter] = useState('')
+  const normalizedFilter =
+    filter && filter.trim().length ? filter.trim().toLowerCase() : null
 
   const [page, setPage] = useState('users')
+
+  const handleSelectPage = page => {
+    setPage(page)
+    setFilter('')
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -62,23 +69,24 @@ const App = () => {
 
         {page === 'users' ? (
           <UserList
+            filter={normalizedFilter}
             currentUser={currentUser}
             users={users}
             selectCurrentUser={selectCurrentUser}
-            filter={filter}
           />
         ) : (
           <ConfigList
             configs={configs}
             addConfig={addConfig}
             removeConfig={removeConfig}
+            filter={normalizedFilter}
           />
         )}
 
         <BottomNavigation
           value={page}
           onChange={(event, page) => {
-            setPage(page)
+            handleSelectPage(page)
           }}
           showLabels
         >
