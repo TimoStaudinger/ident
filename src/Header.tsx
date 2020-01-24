@@ -13,7 +13,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
-import Logo from './users.svg'
+import {ReactComponent as Logo} from './users.svg'
+import {User} from './model/Config'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -38,7 +39,8 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
       width: 'auto'
-    }
+    },
+    marginRight: 16
   },
   searchIcon: {
     width: theme.spacing(7),
@@ -69,40 +71,31 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+interface Props {
+  filter: string
+  setFilter: (filter: string) => void
+  refreshConfigs: () => Promise<void>
+  currentUser: User | null
+  selectCurrentUser: (user: User | null) => void
+}
+
 const Header = ({
   filter,
   setFilter,
   refreshConfigs,
   currentUser,
   selectCurrentUser
-}) => {
+}: Props) => {
   const classes = useStyles()
 
   return (
     <AppBar position="static" className={classes.header}>
       <Toolbar>
-        <img src={Logo} alt="Ident" className={classes.logo} />
+        <Logo className={classes.logo} />
 
         <Typography className={classes.title} variant="h6" noWrap>
           Ident
         </Typography>
-
-        {currentUser && (
-          <Tooltip title="Log out" aria-label="log out">
-            <IconButton onClick={() => selectCurrentUser(null)} color="inherit">
-              <ExitToAppIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-
-        <Tooltip
-          title="Refresh all configurations"
-          aria-label="refresh all configurations"
-        >
-          <IconButton onClick={refreshConfigs} color="inherit">
-            <RefreshIcon />
-          </IconButton>
-        </Tooltip>
 
         <div className={classes.search}>
           <div className={classes.searchIcon}>
@@ -120,6 +113,23 @@ const Header = ({
             onChange={e => setFilter(e.target.value)}
           />
         </div>
+
+        {currentUser && (
+          <Tooltip title="Log out" aria-label="log out">
+            <IconButton onClick={() => selectCurrentUser(null)} color="inherit">
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+
+        <Tooltip
+          title="Refresh all configurations"
+          aria-label="refresh all configurations"
+        >
+          <IconButton onClick={refreshConfigs} color="inherit">
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
     </AppBar>
   )

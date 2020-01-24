@@ -8,6 +8,7 @@ import {
   ListItemAvatar,
   Avatar
 } from '@material-ui/core'
+import {User, DenormalizedUser} from './model/Config'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +19,14 @@ const useStyles = makeStyles(theme => ({
   list: {}
 }))
 
-const UserList = ({filter, currentUser, users, selectCurrentUser}) => {
+interface Props {
+  filter: string | null
+  currentUser: User | null
+  users: DenormalizedUser[]
+  selectCurrentUser: (user: User) => void
+}
+
+const UserList = ({filter, currentUser, users, selectCurrentUser}: Props) => {
   const classes = useStyles()
 
   const filteredUsers = filter
@@ -30,8 +38,9 @@ const UserList = ({filter, currentUser, users, selectCurrentUser}) => {
       <List className={classes.list}>
         {filteredUsers.map(user => (
           <ListItem
+            key={user.name}
             button
-            selected={currentUser && currentUser.name === user.name}
+            selected={currentUser !== null && currentUser.name === user.name}
             onClick={() => selectCurrentUser(user)}
           >
             <ListItemAvatar>

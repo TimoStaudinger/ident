@@ -19,6 +19,7 @@ import {
 import AddIcon from '@material-ui/icons/Add'
 import DescriptionIcon from '@material-ui/icons/Description'
 import DeleteIcon from '@material-ui/icons/Delete'
+import Config from './model/Config'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,7 +38,14 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
+interface Props {
+  filter: string | null
+  configs: Config[]
+  addConfig: (url: string) => Promise<void>
+  removeConfig: (url: string) => void
+}
+
+const ConfigList = ({filter, configs, addConfig, removeConfig}: Props) => {
   const theme = useTheme()
   const classes = useStyles()
 
@@ -49,7 +57,7 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
   const [showAddConfigDialog, setShowAddConfigDialog] = useState(false)
   const [newConfigURL, setNewConfigURL] = useState('')
 
-  const handleRemoveConfig = url => {
+  const handleRemoveConfig = (url: string) => {
     removeConfig(url)
   }
   const handleAddConfig = () => {
@@ -70,14 +78,18 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
     <div className={classes.root}>
       <List>
         {filteredConfigs.map(config => (
-          <ListItem>
+          <ListItem key={config.url}>
             <ListItemIcon>
               <DescriptionIcon />
             </ListItemIcon>
             <ListItemText primary={config.name} secondary={config.url} />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="edit">
-                <DeleteIcon onClick={() => handleRemoveConfig(config.url)} />
+              <IconButton
+                edge="end"
+                aria-label="edit"
+                onClick={() => handleRemoveConfig(config.url)}
+              >
+                <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
@@ -93,12 +105,13 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
           Add a new Configuration
         </DialogTitle>
         <DialogContent>
-          <form className={classes.form} noValidate autoComplete="off">
+          <form noValidate autoComplete="off">
             <TextField
               label="Configuration File URL"
               className={classes.configInput}
               value={newConfigURL}
               onChange={e => setNewConfigURL(e.target.value)}
+              autoFocus
             />
           </form>
         </DialogContent>
@@ -123,7 +136,7 @@ const ConfigList = ({filter, configs, addConfig, removeConfig}) => {
           className={classes.addButton}
           onClick={() => setShowAddConfigDialog(true)}
         >
-          <AddIcon className={classes.extendedIcon} />
+          <AddIcon />
         </Fab>
       </Zoom>
     </div>

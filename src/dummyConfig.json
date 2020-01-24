@@ -1,0 +1,23 @@
+{
+  "name": "Dummy",
+  "applications": [
+    {
+      "name": "My App",
+      "urls": ["example.com"],
+      "users": [
+        {
+          "name": "Jane Baker",
+          "role": "Manager",
+          "headerName": "user-id",
+          "headerValue": "jane"
+        },
+        {
+          "name": "John Doe",
+          "role": "Customer Support",
+          "headerName": "user-id",
+          "headerValue": "john"
+        }
+      ]
+    }
+  ]
+}

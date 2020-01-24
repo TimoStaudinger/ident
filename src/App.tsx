@@ -23,6 +23,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+enum Page {
+  users = 'users',
+  configs = 'configs'
+}
+
 const theme = createMuiTheme({
   palette: {
     primary: {main: '#243B55'},
@@ -50,9 +55,9 @@ const App = () => {
   const normalizedFilter =
     filter && filter.trim().length ? filter.trim().toLowerCase() : null
 
-  const [page, setPage] = useState('users')
+  const [page, setPage] = useState(Page.users)
 
-  const handleSelectPage = page => {
+  const handleSelectPage = (page: Page) => {
     setPage(page)
     setFilter('')
   }
@@ -68,12 +73,12 @@ const App = () => {
           selectCurrentUser={selectCurrentUser}
         />
 
-        {page === 'users' ? (
+        {page === Page.users ? (
           <UserList
-            filter={normalizedFilter}
             currentUser={currentUser}
             users={users}
             selectCurrentUser={selectCurrentUser}
+            filter={normalizedFilter}
           />
         ) : (
           <ConfigList
@@ -87,18 +92,18 @@ const App = () => {
         <Box boxShadow={3}>
           <BottomNavigation
             value={page}
-            onChange={(event, page) => {
+            onChange={(_, page: Page) => {
               handleSelectPage(page)
             }}
             showLabels
           >
             <BottomNavigationAction
-              value="users"
+              value={Page.users}
               label="Users"
               icon={<PersonIcon />}
             />
             <BottomNavigationAction
-              value="config"
+              value={Page.configs}
               label="Configurations"
               icon={<SettingsIcon />}
             />
