@@ -4,7 +4,8 @@ import {
   ThemeProvider,
   createMuiTheme,
   BottomNavigation,
-  BottomNavigationAction
+  BottomNavigationAction,
+  Box
 } from '@material-ui/core'
 import {amber} from '@material-ui/core/colors'
 import PersonIcon from '@material-ui/icons/Person'
@@ -83,24 +84,26 @@ const App = () => {
           />
         )}
 
-        <BottomNavigation
-          value={page}
-          onChange={(event, page) => {
-            handleSelectPage(page)
-          }}
-          showLabels
-        >
-          <BottomNavigationAction
-            value="users"
-            label="Users"
-            icon={<PersonIcon />}
-          />
-          <BottomNavigationAction
-            value="config"
-            label="Configurations"
-            icon={<SettingsIcon />}
-          />
-        </BottomNavigation>
+        <Box boxShadow={3}>
+          <BottomNavigation
+            value={page}
+            onChange={(event, page) => {
+              handleSelectPage(page)
+            }}
+            showLabels
+          >
+            <BottomNavigationAction
+              value="users"
+              label="Users"
+              icon={<PersonIcon />}
+            />
+            <BottomNavigationAction
+              value="config"
+              label="Configurations"
+              icon={<SettingsIcon />}
+            />
+          </BottomNavigation>
+        </Box>
       </div>
     </ThemeProvider>
   )
