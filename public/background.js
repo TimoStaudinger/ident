@@ -4,7 +4,21 @@ const CHROME_VERSION = getChromeVersion()
 
 let currentUser = null
 
-chrome.storage.sync.get(["currentUser"], result => {
+chrome.runtime.onMessage.addListener(request => {
+  console.log('message')
+  if (request.scheme === 'dark') {
+    console.log('setting darkMode')
+    chrome.browserAction.setIcon({
+      path: {
+        '128': 'ident-128-dark.png',
+        '48': 'ident-48-dark.png',
+        '16': 'ident-16-dark.png'
+      }
+    })
+  }
+})
+
+chrome.storage.sync.get(['currentUser'], result => {
   currentUser = result.currentUser
   console.log(currentUser)
 })
@@ -13,34 +27,34 @@ chrome.storage.onChanged.addListener(changes => {
   let domain = null
 
   if (changes.currentUser) {
-    console.log("Switching user...")
+    console.log('Switching user...')
     currentUser = changes.currentUser.newValue
     console.log(currentUser)
   }
 
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     let tab = tabs[0]
     let url = new URL(tab.url)
     domain = url.hostname
 
     if (domain) {
-      console.log("Clearing cookies...")
-      chrome.cookies.getAll({ domain: domain }, cookies => {
+      console.log('Clearing cookies...')
+      chrome.cookies.getAll({domain: domain}, cookies => {
         cookies.forEach(cookie => {
-          chrome.cookies.remove({ url: tab.url, name: cookie.name })
+          chrome.cookies.remove({url: tab.url, name: cookie.name})
         })
 
-        console.log("Clearing local and session storage...")
+        console.log('Clearing local and session storage...')
         chrome.tabs.executeScript(
           {
-            code: "localStorage.clear(); sessionStorage.clear();"
+            code: 'localStorage.clear(); sessionStorage.clear();'
           },
           () => {
-            console.log("Refreshing...")
+            console.log('Refreshing...')
             chrome.tabs.reload()
 
             setUpHeaderListener()
-            console.log("Done.")
+            console.log('Done.')
           }
         )
       })
@@ -66,7 +80,7 @@ function modifyRequestHeaders(headersToInject, headers) {
     if (index !== undefined) {
       headers[index].value = header.value
     } else {
-      headers.push({ name: header.name, value: header.value })
+      headers.push({name: header.name, value: header.value})
       indexMap[header.name.toLowerCase()] = headers.length - 1
     }
   }
@@ -78,11 +92,11 @@ function modifyRequestHeaderHandler(details) {
   }
 
   modifyRequestHeaders(
-    [{ name: currentUser.headerName, value: currentUser.headerValue }],
+    [{name: currentUser.headerName, value: currentUser.headerValue}],
     details.requestHeaders
   )
 
-  return { requestHeaders: details.requestHeaders }
+  return {requestHeaders: details.requestHeaders}
 }
 
 function getChromeVersion() {
@@ -116,10 +130,10 @@ function setUpHeaderListener() {
 
     chrome.webRequest.onBeforeSendHeaders.addListener(
       modifyRequestHeaderHandler,
-      { urls: ["<all_urls>"] },
+      {urls: ['<all_urls>']},
       requiresExtraRequestHeaders
-        ? ["requestHeaders", "blocking", "extraHeaders"]
-        : ["requestHeaders", "blocking"]
+        ? ['requestHeaders', 'blocking', 'extraHeaders']
+        : ['requestHeaders', 'blocking']
     )
   }
 }
