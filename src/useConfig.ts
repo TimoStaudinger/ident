@@ -18,7 +18,7 @@ const useConfig = (): UseConfig => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   const selectCurrentUser = (user: User | null) => {
-    setCurrentUser(user)
+    setCurrentUser(user || null)
     chrome && chrome.storage && chrome.storage.sync.set({currentUser: user})
   }
 
@@ -27,7 +27,7 @@ const useConfig = (): UseConfig => {
       chrome.storage.sync.get(
         ['currentUser', 'configs'],
         (result: {[key: string]: any}) => {
-          setCurrentUser(result.currentUser)
+          setCurrentUser(result.currentUser || null)
           setConfigs(result.configs)
         }
       )
@@ -36,7 +36,7 @@ const useConfig = (): UseConfig => {
         [key: string]: chrome.storage.StorageChange
       }) => {
         if (changes.currentUser) {
-          setCurrentUser(changes.currentUser.newValue)
+          setCurrentUser(changes.currentUser.newValue || null)
         }
 
         if (changes.configs) {
