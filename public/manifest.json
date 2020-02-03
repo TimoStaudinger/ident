@@ -5,12 +5,12 @@
   "version": "1.0.0",
   "description": "A girl has no name.",
   "icons": {
-    "16": "ident-16.png",
-    "48": "ident-48.png",
-    "128": "ident-128.png"
+    "128": "light/ident-128.png",
+    "256": "light/ident-256.png",
+    "512": "light/ident-512.png"
   },
   "browser_action": {
-    "default_icon": "ident.png",
+    "default_icon": "light/ident-512.png",
     "default_title": "Ident",
     "default_popup": "index.html"
   },

@@ -3,23 +3,30 @@
 const CHROME_VERSION = getChromeVersion()
 
 let currentUser = null
+let darkMode = false
+
+let updateIcon = () => {
+  let folder =
+    (darkMode ? 'dark' : 'light') + (currentUser !== null ? '-active' : '')
+  chrome.browserAction.setIcon({
+    path: {
+      '128': `${folder}/ident-128.png`,
+      '256': `${folder}/ident-256.png`,
+      '512': `${folder}/ident-512.png`
+    }
+  })
+}
 
 chrome.runtime.onMessage.addListener(request => {
-  console.log('message')
   if (request.scheme === 'dark') {
-    console.log('setting darkMode')
-    chrome.browserAction.setIcon({
-      path: {
-        '128': 'ident-128-dark.png',
-        '48': 'ident-48-dark.png',
-        '16': 'ident-16-dark.png'
-      }
-    })
+    darkMode = true
+    updateIcon()
   }
 })
 
 chrome.storage.sync.get(['currentUser'], result => {
   currentUser = result.currentUser
+  updateIcon()
   console.log(currentUser)
 })
 
@@ -29,6 +36,7 @@ chrome.storage.onChanged.addListener(changes => {
   if (changes.currentUser) {
     console.log('Switching user...')
     currentUser = changes.currentUser.newValue
+    updateIcon()
     console.log(currentUser)
   }
 
@@ -185,3 +193,4 @@ function setUpHeaderListener() {
 // })
 
 setUpHeaderListener()
+updateIcon()
