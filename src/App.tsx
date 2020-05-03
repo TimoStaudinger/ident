@@ -17,7 +17,7 @@ import ConfigList from './ConfigList'
 
 import useConfig from './useConfig'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: 600
   }
