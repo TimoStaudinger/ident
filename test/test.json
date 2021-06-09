@@ -1,0 +1,23 @@
+{
+  "name": "ACME, Inc.",
+  "applications": [
+    {
+      "name": "Customer Portal",
+      "urls": ["acme.com"],
+      "users": [
+        {
+          "name": "John Doe",
+          "role": "Customer Support",
+          "headerName": "user",
+          "headerValue": "doe1234"
+        },
+        {
+          "name": "Jane Miller",
+          "role": "Super User",
+          "headerName": "user",
+          "headerValue": "mil6543"
+        }
+      ]
+    }
+  ]
+}
