@@ -36,6 +36,7 @@
     ]
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.154"
+    "@types/chrome": "^0.0.154",
+    "cypress": "^8.2.0"
   }
 }
